@@ -41,36 +41,12 @@ main:
 load_Pong:
     mov si, Loading_Pong_Msg
     call print
-
-    mov bx, 0x2000
-    mov es, bx
-    mov bx, 0x0
-
-    mov ah, 0x02    ; BIOS read function
-    mov al, 0x01    ; Read 1 sector
-    mov ch, 0x00    ; Cylinder 0
-    mov cl, 0x02    ; Sector 2 (where Pong is stored)
-    mov dh, 0x00    ; Head 0
-    mov dl, 0x00    ; Drive 0 (floppy)
-    int 0x13        ; Call BIOS to read
-
-    jc disk_read_error
-
-    mov ax, 0x2000
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
-    mov sp, 0xFFFE
-
-    jmp 0x2000:0x0
-
-disk_read_error:
-    mov si, Disk_read_error_msg
-    call print
-    call halt
-    
+    mov ah, 0x00
+    int 0x1A
+    add dx, 92   
+    mov [time_end], dx
+    ;call sleep_bios
+    call disk_read
 
 clear_screen:
     mov ah, 0x00
@@ -89,7 +65,8 @@ halt:
     jmp halt
 
 include "./utils/print_string.asm"
-;include "./utils/disk_read.asm"
+include "./utils/disk_read.asm"
+include "./utils/sleep.asm"
 
 PongOS_Booted_Msg:
     db '#####################################', 0x0D, 0x0A
@@ -98,7 +75,7 @@ PongOS_Booted_Msg:
     db 0x0A, 0  ; Add a newline at the end and a null terminator
 
 Loading_Pong_Msg: db 'Loading Pong.....', 0x0D, 0x0A, 0
-Disk_read_error_msg: db 'Failed to read disk!', 0x0D, 0x0A, 0
+time_end dw 0
 
 RB 510-($-$$)    ; Adjust size for 512-byte boot sector
 DW 0xAA55        ; Boot signature
