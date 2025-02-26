@@ -31,7 +31,7 @@ cpuDifficulty: db 10	; Increased CPU difficulty (higher = slower CPU movement)
 gameSpeed:   dw 10   ; Controls game speed (higher = slower)
 ballMoveCounter: db 0   ; Counter to slow down ball movement
 ballMoveDelay: db 30    ; Increased delay for ball movement (higher = slower ball)
-frameDelay: dw 3F00h   ; Main frame delay (higher = slower game)
+frameDelay: dw 5000h   ; Main frame delay (higher = slower game)
 
 
 setup_pong:
@@ -127,51 +127,92 @@ game_loop:
     add word [ballX], 2
     
     .check_cpu_paddle:
-    ; Alternative CPU paddle collision detection
+    ; Enhanced CPU paddle collision detection
     mov ax, [ballX]
-    cmp ax, CPUX-3      ; Check if ball is near CPU paddle
+    
+    ; First check: Is the ball in the horizontal collision zone?
+    cmp ax, CPUX-3      ; Expanded left collision boundary
     jl .check_scoring   ; Ball is too far left
-    cmp ax, CPUX+1      ; Check if ball is past CPU paddle
+    cmp ax, CPUX        ; Right collision boundary
     jg .check_scoring   ; Ball is too far right
     
-    ; Check Y position overlap
+    ; Second check: Is the ball moving toward the paddle?
+    ; We only need this check if the ball is approaching from the left
+    cmp byte [ballVelX], 1
+    jne .check_y_overlap  ; If moving left or stationary, still check Y overlap
+    
+    ; If we're here, the ball is in the horizontal zone and moving right
+    
+    .check_y_overlap:
+    ; Third check: Is the ball within the paddle's vertical range?
     mov ax, [ballY]
     mov bx, [cpuY]
     
-    ; Check if ball bottom is above paddle top
+    ; Is ball above the paddle?
     cmp ax, bx
     jl .check_scoring
     
-    ; Check if ball top is below paddle bottom
+    ; Is ball below the paddle?
     mov cx, bx
-    add cx, PADDLEHEIGHT
+    add cx, PADDLEHEIGHT-1
     cmp ax, cx
-    jge .check_scoring
+    jg .check_scoring
     
     ; Ball hit the CPU paddle!
-    mov byte [ballVelX], -1
-    mov word [ballX], CPUX-4
     
-    ; Visual indicator of collision
-    mov ax, 4720h       ; Red background
-    mov [es:0], ax      ; Display at top-left corner
+    ; 1. Reverse ball direction
+    mov byte [ballVelX], -1
+    
+    ; 2. Position the ball just to the left of the paddle to prevent sticking
+    mov word [ballX], CPUX-3
+    
+    ; 3. Add a small random vertical deflection for more interesting gameplay
+    mov ax, [ballY]
+    add ax, [cpuTimer]  ; Use cpuTimer as a pseudo-random value
+    and ax, 1           ; Get just the lowest bit (0 or 1)
+    jz .no_y_change
+    
+    ; Change Y direction slightly based on where the ball hit the paddle
+    mov ax, [ballY]
+    sub ax, [cpuY]      ; Calculate relative position on paddle
+    cmp ax, PADDLEHEIGHT/2
+    jl .hit_top_half
+    
+    ; Hit bottom half - ensure downward movement
+    cmp byte [ballVelY], 0
+    jg .no_y_change     ; Already moving down
+    neg byte [ballVelY] ; Change to moving down
+    jmp .no_y_change
+    
+    .hit_top_half:
+    ; Hit top half - ensure upward movement
+    cmp byte [ballVelY], 0
+    jl .no_y_change     ; Already moving up
+    neg byte [ballVelY] ; Change to moving up
+    
+    .no_y_change:
+    ; Skip scoring check after collision
+    jmp .skip_ball_movement
 
     .check_scoring:
-    ; Check if ball went past paddles (scoring)
+    ; Check if ball went out of bounds and reset it
     cmp word [ballX], 0
-    jg .check_cpu_score
-    inc byte [cpuScore]
+    jg .check_right_bound
+    ; Ball went past left edge, reset to center
     mov word [ballX], 66
     mov word [ballY], 7
+    mov byte [ballVelX], 1  ; Start moving right
+    jmp .skip_ball_movement
     
-    .check_cpu_score:
+    .check_right_bound:
     cmp word [ballX], SCREENW*2
     jl .skip_ball_movement
-    inc byte [playerScore]
+    ; Ball went past right edge, reset to center
     mov word [ballX], 66
     mov word [ballY], 7
+    mov byte [ballVelX], -1  ; Start moving left
 
-.skip_ball_movement:
+    .skip_ball_movement:
     .check_keyboard:
         ; Check keyboard buffer
         mov ah, 1       ; Check if key is available
