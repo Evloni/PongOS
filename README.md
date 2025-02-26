@@ -16,10 +16,9 @@ This is not a perfect pong game because it is my first time writing in assembly,
 - 💾 **Bootable from an ISO file**—no extra software needed.
 
 ## Installation 💾🔧🚀
-1. ⬇️ **Download the PongOS ISO file** (link to be provided).
-2. 🔥 **Create a bootable USB drive** using tools like Rufus (Windows) or Balena Etcher (Mac/Linux).
-3. 🔄 **Boot from the USB drive** on your machine.
-4. 🏆 Enjoy playing Pong as if you're in an arcade! 🎮🏆🎊
+1. Clone the repository
+2. Run `make` to build PongOS!
+3. Then you are ready to go!
 
 ## System Requirements 🖥️⚙️✅
 - 💻 A PC capable of booting from USB/DVD.

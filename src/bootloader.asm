@@ -45,7 +45,7 @@ load_Pong:
     int 0x1A
     add dx, 92   
     mov [time_end], dx
-    ;call sleep_bios
+    call sleep_bios
     call disk_read
 
 clear_screen:
