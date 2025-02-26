@@ -13,7 +13,6 @@ This is not a perfect pong game because it is my first time writing in assembly,
 ## Features 🎮⚡🖥️
 - 🎯 **Lightweight OS** built specifically to run Pong.
 - 🕹️ **Retro arcade experience** with a minimalistic design.
-- 💾 **Bootable from an ISO file**—no extra software needed.
 
 ## Installation 💾🔧🚀
 1. Clone the repository
@@ -21,7 +20,6 @@ This is not a perfect pong game because it is my first time writing in assembly,
 3. Then you are ready to go!
 
 ## System Requirements 🖥️⚙️✅
-- 💻 A PC capable of booting from USB/DVD.
 - ⌨️ Basic keyboard support for controls.
 - 🚫 No hard drive installation required!
 
@@ -35,7 +33,7 @@ PongOS is not open source, but users are allowed to use it without modifications
 ---
 
 ### Notes 📝🎶🏓
-PongOS is a fun experiment in creating a minimalist OS. It’s not designed for general-purpose computing—just pure Pong nostalgia! 🎮💡🕹️
+PongOS is a fun experiment in creating a minimalist OS. It’s not designed for general purpose computing just pure Pong nostalgia! 🎮💡🕹️
 
 ---
 
