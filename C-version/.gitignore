@@ -1,0 +1,6 @@
+build/
+disk.img
+*.bin
+*.elf
+*.o
+*.ld
