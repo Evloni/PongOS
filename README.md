@@ -7,6 +7,7 @@ PongOS is a custom operating system designed to replicate the feel of an old-sch
 
 ## Important Note ⚠️
 This is not a perfect pong game because it is my first time writing in assembly, just be aware of bugs.
+If you want a better experience i would recomend trying the C-version😁 
 
 ---
 
@@ -18,6 +19,11 @@ This is not a perfect pong game because it is my first time writing in assembly,
 1. Clone the repository
 2. Run `make` to build PongOS!
 3. Then you are ready to go!
+### If you want to play the C-version
+1. `cd C-version`
+2. Run `make`
+3. Then this is were the fun begins
+   
 
 ## System Requirements 🖥️⚙️✅
 - ⌨️ Basic keyboard support for controls.
@@ -25,7 +31,6 @@ This is not a perfect pong game because it is my first time writing in assembly,
 
 ## Controls 🎮🎛️⌨️
 - ⬆️ **W / S** - Move paddle up and down.
-- ❌ **Esc** - Quit the game.
 
 ## License 📜🔒✅
 PongOS is not open source, but users are allowed to use it without modifications. ⚠️📄✅
@@ -38,8 +43,5 @@ PongOS is a fun experiment in creating a minimalist OS. It’s not designed for 
 ---
 
 ### Roadmap 🛠️🚀
-- 🎮 **Smoother movement**
-- 🔲 **Remove screen flickering**
-- 🏓 **Ball bounce off the computer paddle**
 - 🎮 **Add sound**
-- 🎮 **Possible add a scoring system**
+
