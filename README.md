@@ -44,4 +44,8 @@ PongOS is a fun experiment in creating a minimalist OS. It’s not designed for 
 
 ### Roadmap 🛠️🚀
 - 🎮 **Add sound**
+### For the C-version
+- 🎮 **Add sound**
+- **Possibly add mutiplayer support**
+
 
